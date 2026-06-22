@@ -1,0 +1,2 @@
+# nicnames_subdomain_distribution_website
+用于对nicnames官网得域名进行一个二级域名分发得网站 

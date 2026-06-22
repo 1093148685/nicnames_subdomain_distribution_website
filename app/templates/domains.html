@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Domains — DNS Portal</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap">
+    <style>
+        :root { --background: oklch(100% 0 0); --foreground: oklch(14.5% 0 0); --card: oklch(100% 0 0); --card-foreground: oklch(14.5% 0 0); --primary: oklch(55% .236 263); --primary-foreground: oklch(98.5% 0 0); --secondary: oklch(97% 0 0); --secondary-foreground: oklch(20.5% 0 0); --muted: oklch(97% 0 0); --muted-foreground: oklch(55.6% 0 0); --accent: oklch(97% 0 0); --border: oklch(92.2% 0 0); --input: oklch(92.2% 0 0); --ring: oklch(70.8% 0 0); --radius: .625rem; --font-sans: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+        .dark { --background: oklch(14.5% 0 0); --foreground: oklch(98.5% 0 0); --card: oklch(20.5% 0 0); --card-foreground: oklch(98.5% 0 0); --primary: oklch(62% .2 263); --primary-foreground: oklch(98.5% 0 0); --secondary: oklch(26.9% 0 0); --secondary-foreground: oklch(98.5% 0 0); --muted: oklch(26.9% 0 0); --muted-foreground: oklch(70.8% 0 0); --accent: oklch(26.9% 0 0); --border: oklch(100% 0 0 / .1); --input: oklch(100% 0 0 / .15); --ring: oklch(55.6% 0 0); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-family: var(--font-sans); background: var(--background); color: var(--foreground); }
+        body { min-height: 100vh; }
+        a { color: inherit; text-decoration: none; }
+        button { cursor: pointer; font-family: inherit; border: none; background: none; }
+        input { font-family: inherit; }
+        .container { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
+        .navbar { position: sticky; top: 0; z-index: 50; background: oklab(1 0 0 / 0.7); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+        .navbar-inner { display: flex; align-items: center; justify-content: space-between; height: 3.5rem; max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
+        .navbar-logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.125rem; }
+        .navbar-nav { display: flex; align-items: center; gap: 1.5rem; }
+        .navbar-nav a { font-size: 0.875rem; color: var(--muted-foreground); transition: color 0.15s; }
+        .navbar-nav a:hover, .navbar-nav a.active { color: var(--foreground); }
+        .navbar-actions { display: flex; align-items: center; gap: 0.75rem; }
+        .navbar-actions button { font-size: 0.875rem; padding: 0.5rem 1rem; border-radius: var(--radius); font-weight: 500; }
+        .btn-signin { color: var(--foreground); } .btn-signin:hover { background: var(--accent); }
+        .btn-signup { background: var(--primary); color: var(--primary-foreground); } .btn-signup:hover { opacity: 0.9; }
+        .theme-toggle { padding: 0.375rem; border-radius: var(--radius); color: var(--muted-foreground); }
+        .theme-toggle:hover { background: var(--accent); color: var(--foreground); }
+        .page-header { display: flex; align-items: center; justify-content: space-between; padding: 2rem 0 1.5rem; flex-wrap: wrap; gap: 1rem; }
+        .page-header h1 { font-size: 1.5rem; font-weight: 700; }
+        .search-box { display: flex; gap: 0.5rem; align-items: center; background: var(--card); border: 1px solid var(--input); border-radius: var(--radius); padding: 0.5rem 0.75rem; }
+        .search-box input { border: none; background: transparent; outline: none; font-size: 0.875rem; color: var(--foreground); width: 16rem; }
+        .search-box input::placeholder { color: var(--muted-foreground); }
+        .domain-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: 1rem; padding-bottom: 3rem; }
+        .domain-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.15s, box-shadow 0.15s; }
+        .domain-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .domain-card h3 { font-size: 1.125rem; font-weight: 600; }
+        .domain-card .domain-label { font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.25rem; }
+        .domain-card .domain-desc { font-size: 0.875rem; color: var(--muted-foreground); margin-top: 0.75rem; line-height: 1.5; }
+        .domain-card .domain-actions { margin-top: 1rem; display: flex; gap: 0.5rem; }
+        .btn-claim { background: var(--primary); color: var(--primary-foreground); padding: 0.5rem 1.25rem; border-radius: var(--radius); font-size: 0.875rem; font-weight: 500; display: inline-flex; align-items: center; gap: 0.375rem; }
+        .btn-claim:hover { opacity: 0.9; }
+        .toast { position: fixed; top: 1rem; right: 1rem; z-index: 9999; padding: 0.75rem 1rem; border-radius: var(--radius); font-size: 0.875rem; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: none; }
+        .toast-success { background: oklch(96% .05 145); border: 1px solid oklch(88% .12 145); color: oklch(35% .12 145); }
+        .toast-error { background: oklch(96% .03 25); border: 1px solid oklch(88% .08 25); color: oklch(45% .18 25); }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; width: 100%; max-width: 28rem; }
+        .modal h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; }
+        .modal .form-group { margin-bottom: 0.75rem; }
+        .modal .form-group label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; }
+        .modal .form-group input, .modal .form-group select { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--input); border-radius: var(--radius); background: var(--background); color: var(--foreground); font-size: 0.875rem; outline: none; }
+        .modal .form-group input:focus, .modal .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px oklch(62% .2 263 / 0.15); }
+        .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.25rem; }
+        .btn-cancel { border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: var(--radius); font-size: 0.875rem; font-weight: 500; }
+        .btn-cancel:hover { background: var(--accent); }
+        .btn-confirm { background: var(--primary); color: var(--primary-foreground); padding: 0.5rem 1rem; border-radius: var(--radius); font-size: 0.875rem; font-weight: 500; }
+        .btn-confirm:hover { opacity: 0.9; }
+        .footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; font-size: 0.8125rem; color: var(--muted-foreground); }
+    </style>
+</head>
+<body>
+    <div id="toast" class="toast"></div>
+
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="/" class="navbar-logo">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="oklch(55% .236 263)"/><text x="14" y="19" text-anchor="middle" fill="white" font-size="14" font-weight="800" font-family="Nunito,sans-serif">D</text></svg>
+                <span>DNS Portal</span>
+            </a>
+            <div class="navbar-nav">
+                <a href="/domains" class="active">Available Domains</a>
+                <a href="/">WHOIS</a>
+                <a href="/">Knowledge Base</a>
+                <a href="/">Featured Sites</a>
+            </div>
+            <div class="navbar-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+                {% if user %}
+                <a href="/dashboard" style="padding:0.5rem 1rem;border-radius:var(--radius);font-size:0.875rem;font-weight:500;background:var(--primary);color:var(--primary-foreground)">Dashboard</a>
+                {% else %}
+                <button class="btn-signin" onclick="location.href='/auth/login'">Sign in</button>
+                <button class="btn-signup" onclick="location.href='/auth/register'">Sign up</button>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Available Domains</h1>
+            <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" id="domainSearch" placeholder="Search subdomain..." oninput="filterDomains()">
+            </div>
+        </div>
+
+        <div class="domain-grid">
+            {% for d in domains %}
+            <div class="domain-card" data-domain="{{ d.domain }}">
+                <h3>*.{{ d.domain }}</h3>
+                <div class="domain-label">Root domain: {{ d.domain }}</div>
+                <div class="domain-desc">{{ d.description }}</div>
+                <div class="domain-actions">
+                    {% if user %}
+                    <button class="btn-claim" onclick="openClaimModal('{{ d.domain }}')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        Claim
+                    </button>
+                    {% else %}
+                    <button class="btn-claim" onclick="location.href='/auth/login'">Sign in to Claim</button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Claim Domain Modal -->
+    <div class="modal-overlay" id="claimModal">
+        <div class="modal">
+            <h2>Claim Subdomain</h2>
+            <form id="claimForm" onsubmit="claimDomain(event)">
+                <div class="form-group">
+                    <label>Subdomain</label>
+                    <div style="display:flex;align-items:center;gap:0.5rem">
+                        <input type="text" id="subdomain" name="subdomain" placeholder="your-name" required style="flex:1;text-align:right">
+                        <span style="color:var(--muted-foreground);font-size:0.875rem;white-space:nowrap" id="rootDisplay">.ccocc.cyou</span>
+                    </div>
+                </div>
+                <input type="hidden" name="root" id="rootDomain">
+                <div class="form-group">
+                    <label>Target Type</label>
+                    <select name="target_type" id="targetType" onchange="toggleTargetInput()">
+                        <option value="ip">IP Address (A Record)</option>
+                        <option value="cname">Domain (CNAME)</option>
+                    </select>
+                </div>
+                <div class="form-group" id="targetGroup">
+                    <label>Target</label>
+                    <input type="text" id="target" name="target" placeholder="34.104.199.208">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeClaimModal()">Cancel</button>
+                    <button type="submit" class="btn-confirm">Claim Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 DNS Portal. Free subdomain service.</p>
+    </footer>
+
+    <script>
+        var currentRoot = '';
+        function getTheme() { return localStorage.getItem('theme') || 'light'; }
+        function setTheme(t) { document.documentElement.className = t === 'dark' ? 'dark' : ''; localStorage.setItem('theme', t); document.getElementById('theme-icon').innerHTML = t === 'dark' ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>' : '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>'; }
+        setTheme(getTheme());
+        function toggleTheme() { setTheme(getTheme() === 'dark' ? 'light' : 'dark'); }
+        function showToast(msg, type) { var t=document.getElementById('toast'); t.textContent=msg; t.className='toast toast-'+type; t.style.display='block'; setTimeout(function(){t.style.display='none';},3000); }
+
+        function openClaimModal(root) {
+            currentRoot = root;
+            document.getElementById('rootDomain').value = root;
+            document.getElementById('rootDisplay').textContent = '.' + root;
+            document.getElementById('claimModal').classList.add('active');
+            document.getElementById('subdomain').value = '';
+        }
+        function closeClaimModal() { document.getElementById('claimModal').classList.remove('active'); }
+
+        function toggleTargetInput() {
+            var type = document.getElementById('targetType').value;
+            var tg = document.getElementById('target');
+            if (type === 'ip') { tg.placeholder = '34.104.199.208'; } else { tg.placeholder = 'your-domain.com'; }
+        }
+
+        function claimDomain(e) {
+            e.preventDefault();
+            var fd = new FormData(document.getElementById('claimForm'));
+            fetch('/api/domain/claim', { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (d.success) {
+                    showToast('Domain claimed! Redirecting...', 'success');
+                    setTimeout(function() { location.href = d.redirect; }, 1000);
+                } else {
+                    showToast(d.error || 'Failed to claim domain', 'error');
+                }
+            })
+            .catch(function() { showToast('Network error', 'error'); });
+        }
+
+        function filterDomains() {
+            var q = document.getElementById('domainSearch').value.toLowerCase();
+            document.querySelectorAll('.domain-card').forEach(function(c) {
+                c.style.display = c.dataset.domain.includes(q) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

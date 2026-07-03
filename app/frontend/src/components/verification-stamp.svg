@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <clipPath id="stamp-clip">
+      <circle cx="60" cy="60" r="56"/>
+    </clipPath>
+  </defs>
+  <!-- Outer ring -->
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#dc2626" stroke-width="4"
+          stroke-dasharray="12,4" opacity="0.55"/>
+  <!-- Inner ring -->
+  <circle cx="60" cy="60" r="51" fill="none" stroke="#dc2626" stroke-width="1.5" opacity="0.4"/>
+  <!-- Center star -->
+  <polygon points="60,28 64,48 72,38 68,52 82,48 72,58 82,72 66,68 64,82 60,68 56,82 54,68 38,72 48,58 38,48 52,52 48,38 56,48"
+           fill="#dc2626" opacity="0.3"/>
+  <!-- Outer text "DNS.CCOCC" along top arc -->
+  <path id="top-arc" d="M 20,60 A 40,40 0 0,1 100,60" fill="none"/>
+  <text font-size="9.5" font-weight="700" letter-spacing="3">
+    <textPath href="#top-arc" startOffset="25%" text-anchor="middle" fill="#dc2626" opacity="0.45">
+      认 证 通 过
+    </textPath>
+  </text>
+  <!-- Bottom arc text -->
+  <path id="bot-arc" d="M 100,60 A 40,40 0 0,1 20,60" fill="none"/>
+  <text font-size="9.5" font-weight="700" letter-spacing="1">
+    <textPath href="#bot-arc" startOffset="23%" text-anchor="middle" fill="#dc2626" opacity="0.4">
+      DNS.CCOCC ✓
+    </textPath>
+  </text>
+  <!-- Center icon (checkmark) -->
+  <path d="M46,62 l8,8 l20,-20" fill="none" stroke="#dc2626" stroke-width="4"
+        stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+</svg>

@@ -1,0 +1,42 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+dist/
+build/
+static/
+
+# Runtime data / secrets
+data/
+logs/
+backups/
+*.db
+*.sqlite
+*.sqlite3
+*.session
+.env
+.env.*
+!.env.example
+*token*.json
+*credential*
+
+# Local AI/agent workspace files
+.hermes/
+.claude/
+AGENTS.md
+CLAUDE.md
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

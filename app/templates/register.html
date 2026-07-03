@@ -1,0 +1,38 @@
+{% extends "auth_base.html" %}
+{% block title %}Sign Up — DNS Portal{% endblock %}
+{% block auth_content %}
+<h1>Create account</h1>
+<p class="auth-subtitle">Get your free subdomain today</p>
+<div class="form-error" id="formError"></div>
+<form id="registerForm" onsubmit="register(event)">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="yourname" required minlength="3" maxlength="32">
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required minlength="6">
+    </div>
+    <button type="submit" class="form-submit">Sign Up</button>
+</form>
+<div class="auth-footer">
+    Already have an account? <a href="/auth/login">Sign In</a>
+</div>
+<script>
+function register(e) {
+    e.preventDefault();
+    var fd = new FormData(document.getElementById('registerForm'));
+    fetch('/api/auth/register', { method: 'POST', body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+        if (d.success) { location.href = d.redirect; }
+        else { showError(d.error || 'Registration failed'); }
+    })
+    .catch(function() { showError('Network error'); });
+}
+</script>
+{% endblock %}

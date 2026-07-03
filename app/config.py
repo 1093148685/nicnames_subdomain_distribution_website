@@ -12,13 +12,13 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///data/dnsportal.db"
     
     # Auth
-    secret_key: str = "dns-portal-secret-key-change-in-production"
+    secret_key: str = "CHANGE_ME_IN_PRODUCTION"
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 1440  # 24 hours
     
     # NicNames
-    nicnames_email: str = "3126808313@qq.com"
-    nicnames_password: str = "***"
+    nicnames_email: str = ""
+    nicnames_password: str = ""
     
     # DNS domains we manage
     managed_domains: list = []

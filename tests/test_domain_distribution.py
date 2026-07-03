@@ -2,8 +2,9 @@ import os
 import sys
 import json
 
-os.chdir('/opt/data/apps/dnsportal')
-sys.path.insert(0, '/opt/data/apps/dnsportal')
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+os.chdir(PROJECT_ROOT)
+sys.path.insert(0, PROJECT_ROOT)
 
 from app.web import _domain_distribution_meta, _public_domain_enabled, mask_config_value
 

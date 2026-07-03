@@ -90,13 +90,13 @@ export function ContactPage() {
     <InfoPage title="联系我们" desc="遇到注册、DNS、滥用或账号问题，可以通过以下方式联系。">
       <InfoCard title="联系方式">
         <div className="contact-methods">
-          <a className="contact-method" href="mailto:1093148685@qq.com">
-            <span>QQ 邮箱</span>
-            <strong>1093148685@qq.com</strong>
+          <a className="contact-method" href="mailto:contact@example.com">
+            <span>联系邮箱</span>
+            <strong>contact@example.com</strong>
           </a>
-          <a className="contact-method" href="https://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=1093148685@qq.com" target="_blank" rel="noreferrer">
-            <span>QQ 邮箱网页版</span>
-            <strong>通过 QQ 邮箱写信</strong>
+          <a className="contact-method" href="mailto:abuse@example.com" target="_blank" rel="noreferrer">
+            <span>滥用举报邮箱</span>
+            <strong>abuse@example.com</strong>
           </a>
         </div>
       </InfoCard>

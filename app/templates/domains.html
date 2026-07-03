@@ -141,7 +141,7 @@
                 </div>
                 <div class="form-group" id="targetGroup">
                     <label>Target</label>
-                    <input type="text" id="target" name="target" placeholder="34.104.199.208">
+                    <input type="text" id="target" name="target" placeholder="192.0.2.10">
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeClaimModal()">Cancel</button>
@@ -175,7 +175,7 @@
         function toggleTargetInput() {
             var type = document.getElementById('targetType').value;
             var tg = document.getElementById('target');
-            if (type === 'ip') { tg.placeholder = '34.104.199.208'; } else { tg.placeholder = 'your-domain.com'; }
+            if (type === 'ip') { tg.placeholder = '192.0.2.10'; } else { tg.placeholder = 'your-domain.com'; }
         }
 
         function claimDomain(e) {

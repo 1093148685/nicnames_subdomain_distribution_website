@@ -1294,8 +1294,10 @@ async def public_submit_featured_site(request: Request, db: Session = Depends(ge
 async def public_auth_config(db: Session = Depends(get_db)):
     gcfg = _oidc_provider_config(db, "github")
     lcfg = _oidc_provider_config(db, "linuxdo")
+    hcfg = _oidc_provider_config(db, "hongconnect")
     github_configured = bool(gcfg and gcfg.get("client_id") and gcfg.get("client_secret"))
     linuxdo_configured = bool(lcfg and lcfg.get("client_id") and lcfg.get("client_secret"))
+    hongconnect_configured = bool(hcfg and hcfg.get("client_id") and hcfg.get("client_secret"))
     return {
         "login_enabled": _bool_config(db, "login_enabled", True),
         "registration_enabled": _bool_config(db, "registration_enabled", True),
@@ -1314,6 +1316,8 @@ async def public_auth_config(db: Session = Depends(get_db)):
              "description": "GitHub OIDC 登录" if github_configured else "未配置"},
             {"key": "linuxdo", "name": "Linux.do", "enabled": linuxdo_configured,
              "description": "Linux.do OIDC 登录" if linuxdo_configured else "未配置"},
+            {"key": "hongconnect", "name": "泓登录", "enabled": hongconnect_configured,
+             "description": "使用泓聊社区账号登录" if hongconnect_configured else "未配置"},
         ],
     }
 
@@ -1501,6 +1505,18 @@ def _oidc_provider_config(db: Session, provider: str) -> dict | None:
             "id_field": "id",
             "client_id_key": "linuxdo_client_id",
             "client_secret_key": "linuxdo_client_secret",
+        },
+        "hongconnect": {
+            "authorize_url": f"{_get_config(db, 'hongconnect_issuer', 'https://connect.ccocc.cyou').rstrip('/')}/oauth/authorize",
+            "token_url": f"{_get_config(db, 'hongconnect_issuer', 'https://connect.ccocc.cyou').rstrip('/')}/api/oauth/token",
+            "user_url": f"{_get_config(db, 'hongconnect_issuer', 'https://connect.ccocc.cyou').rstrip('/')}/api/oauth/userinfo",
+            "scope": "openid profile email trust_level",
+            "username_field": "preferred_username",
+            "email_field": "email",
+            "avatar_field": "picture",
+            "id_field": "sub",
+            "client_id_key": "hongconnect_client_id",
+            "client_secret_key": "hongconnect_client_secret",
         },
     }
     if provider not in base:
